@@ -49,14 +49,13 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required',
             'short_code' => 'required|unique:categories,short_code',
-            'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-
+            //   'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $input = $request->all();
 
-        $image_upload = $categoryService->uploadImage($request);
-        $categoryService->createCategory($input,$image_upload);
+        //  $image_upload = $categoryService->uploadImage($request);
+        $categoryService->createCategory($input);
 
         return redirect()->route('categories.index')->with('success', 'Category created successfully');
     }
@@ -81,11 +80,10 @@ class CategoryController extends Controller
     public function edit($id, CategoryService $categoryService)
     {
         //
-        $id=decrypt($id);
         $parents = $categoryService->categoryArray();
 
         $category = $categoryService->getCategory($id);
-        return view('categories.edit',compact('category','parents'));
+        return view('categories.edit', compact('category', 'parents'));
     }
 
     /**
@@ -95,30 +93,28 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id,CategoryService $categoryService)
+    public function update(Request $request, $id, CategoryService $categoryService)
     {
         //
-        $id=decrypt($id);
         $request->validate([
             'name' => 'required',
             'short_code' => 'required|unique:categories,short_code,' . $id,
-            'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
 
         $input = $request->all();
         $category = $categoryService->getCategory($id);
-        $image_upload = null;
-        if (!empty($request->file('icon_url'))) {
-            ($category->icon_url) ? $categoryService->deleteImage($category->icon_url) : '';
-            $image_upload = $categoryService->uploadImage($request);
-        }
+        // $image_upload = null;
+        // if (!empty($request->file('icon_url'))) {
+        //     ($category->icon_url) ? $categoryService->deleteImage($category->icon_url) : '';
+        //     $image_upload = $categoryService->uploadImage($request);
+        // }
 
 
-        $categoryService->updateCatgeory($category, $input,$image_upload);
+        $categoryService->updateCatgeory($category, $input);
 
         return redirect()->route('categories.index')->with('success', 'Category updated successfully');
-
     }
 
     /**
@@ -131,11 +127,12 @@ class CategoryController extends Controller
     {
         $category = $categoryService->getCategory($id);
 
-        $categoryService->deleteImage($category->icon_url);
+        // $categoryService->deleteImage($category->icon_url);
 
         $categoryService->deleteCategory($category);
 
-        return redirect()->back()
-            ->with('success', 'Category deleted successfully');
+        return response()->json(array('success' => true, 'message' => 'Category deleted Successfully'));
+        // return redirect()->back()
+        //     ->with('success', 'Category deleted successfully');
     }
 }

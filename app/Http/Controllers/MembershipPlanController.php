@@ -43,6 +43,7 @@ class MembershipPlanController extends Controller
             'title' => 'required',
             'pricing' => 'required',
             'no_of_month' => 'required',
+            'view_limit' => 'required',
             'description' => 'required'
         ]);
 
@@ -92,6 +93,7 @@ class MembershipPlanController extends Controller
             'title' => 'required',
             'pricing' => 'required',
             'no_of_month' => 'required',
+            'view_limit' => 'required',
             'description' => 'required'
         ]);
         $input = $request->all();

@@ -57,6 +57,8 @@ return [
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+    'image_root_url' => env('IMAGE_ROOT_PATH', null),
+    'api_url' => env('API_URL', null),
 
     /*
     |--------------------------------------------------------------------------

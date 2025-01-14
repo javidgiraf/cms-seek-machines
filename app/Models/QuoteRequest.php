@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\SellMachine;
+use App\Models\User;
 
 class QuoteRequest extends Model
 {
@@ -23,7 +24,12 @@ class QuoteRequest extends Model
     ];
 
     public function sellmachine()
-    {
-        return $this->belongsTo(SellMachine::class);
-    }
+  {
+      return $this->belongsTo(SellMachine::class, 'sell_machine_id', 'id');
+  }
+  public function user()
+{
+    return $this->belongsTo(User::class, 'user_id', 'id');
+}
+
 }

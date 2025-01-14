@@ -1,0 +1,40 @@
+section.content {
+    background: #f1f1f1;
+}
+
+.btn-primary {
+    background: #e33240;
+}
+
+.btn-primary:hover {
+    background: #202945;
+}
+
+a {
+    color: #202945;
+}
+
+a:hover,
+a:focus {
+    color: #e33240;
+}
+
+.theme-blush .sidebar .menu .list a:hover {
+    color: #e33240;
+}
+
+.theme-blush .navbar-right .navbar-nav>li>a:hover {
+    background: #e33240;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.show>.btn-primary.dropdown-toggle {
+    background-color: #eb6670;
+    border-color: #e33240;
+    color: #fff;
+}
+.slimScrollDiv
+{
+  overflow: scroll !important;
+}

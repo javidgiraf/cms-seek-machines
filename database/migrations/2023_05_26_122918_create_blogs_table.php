@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('blogs', function (Blueprint $table) {
+            $table->id();
             $table->text('title');
             $table->string('slug')->unique();
             $table->longText('description')->nullable();

@@ -77,6 +77,20 @@ class SubscriptionController extends Controller
 
     }
 
+    public function updateViewCount(Request $request, SubscriptionService $subscriptionService)
+    {
+        //
+        $request->validate([
+            'subscriptionid' => 'required',
+            'view_count' => 'required',
+        ]);
+
+        $input = $request->all();
+        $subscriptionService->updateCount($input);
+
+        return redirect()->route('subscriptions.index')->with('success', 'View Count Updated successfully');
+    }
+
     /**
      * Remove the specified resource from storage.
      *

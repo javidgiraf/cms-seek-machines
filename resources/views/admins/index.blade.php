@@ -24,8 +24,8 @@
                     <div class="card">
                         <div class="header">
                             @include('layouts.partials.messages')
-                            <h2><strong>List </strong> Admins </h2>
-                            <div style='text-align: end' ;><a href="{{route('admins.create')}}" class="btn btn-primary"><i class="zmdi zmdi-plus" style="padding-right: 6px;"></i><span>Add Admin</span></a></div>
+                            <h2><strong>List </strong> Admins Users</h2>
+                            <div style='text-align: end' ;><a href="{{route('admins.create')}}" class="btn btn-primary"><i class="zmdi zmdi-plus" style="padding-right: 6px;"></i><span>Add Admin User</span></a></div>
                         </div>
 
                         <div class="body">
@@ -64,8 +64,12 @@
                                             @else
                                             <td><img src="{{asset('frontend/assets/images/no-image.png')}}" style="width:100px"></td>
                                             @endif --}}
-                                            <td><a href="{{route('admins.edit',encrypt($user->id))}}" style="margin-right: 10px;"><i class="zmdi zmdi-edit"></i></a><a href="javascript:void(0);" onclick="event.preventDefault();
-                                                document.getElementById('delete-form-{{ $user->id }}').submit();"><i class="zmdi zmdi-delete"></i></a></td>
+                                            <td><a href="{{route('admins.edit',$user->id)}}" style="margin-right: 10px;"><i class="zmdi zmdi-edit"></i></a>
+                                            @if(!$user->hasRole('admin')) 
+                                            <a href="javascript:void(0);" onclick="event.preventDefault();
+                                                document.getElementById('delete-form-{{ $user->id }}').submit();"><i class="zmdi zmdi-delete"></i></a>
+                                                  @endif
+                                                </td>
                                             {!! Form::open(['method' => 'DELETE','route' => ['admins.destroy', $user->id],'style'=>'display:none',
                                             'id' => 'delete-form-'.$user->id]) !!}
                                             {!! Form::close() !!}

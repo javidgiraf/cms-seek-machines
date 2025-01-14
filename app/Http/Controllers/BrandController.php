@@ -37,20 +37,19 @@ class BrandController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,BrandService $brandService)
+    public function store(Request $request, BrandService $brandService)
     {
         //
-
         $request->validate([
-            'manufacturer' => 'required',
-            'short_code' => 'required|unique:brands,short_code',
-            'logo_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'manufacturer'      => 'required',
+            'short_code'        => 'required|unique:brands,short_code',
+            // 'single_image_url'  => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
 
         $input = $request->all();
-        $image_upload = $brandService->uploadImage($request);
-        $brandService->createBrand($input,$image_upload);
+        // $image_upload = $brandService->uploadImage($request);
+        $brandService->createBrand($input);
 
         return redirect()->route('brands.index')->with('success', 'Brand created successfully');
     }
@@ -72,14 +71,11 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,BrandService $brandService)
+    public function edit($id, BrandService $brandService)
     {
         //
-        $id=decrypt($id);
         $brand = $brandService->getBrand($id);
-        return view('brands.edit',compact('brand'));
-
-
+        return view('brands.edit', compact('brand'));
     }
 
     /**
@@ -89,15 +85,13 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id,BrandService $brandService)
+    public function update(Request $request, $id, BrandService $brandService)
     {
         //
-        $id=decrypt($id);
         $request->validate([
             'manufacturer' => 'required',
             'short_code' => 'required|unique:brands,short_code,' . $id,
-            'logo_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-
+            //'logo_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $input = $request->all();
@@ -105,13 +99,13 @@ class BrandController extends Controller
         // update brands
 
         $brands = $brandService->getBrand($id);
-        $image_upload = null;
-        if (!empty($request->file('logo_url'))) {
-            ($brands->logo_url) ? $brandService->deleteImage($brands->logo_url) : '';
-            $image_upload = $brandService->uploadImage($request);
-        }
+        // $image_upload = null;
+        // if (!empty($request->file('logo_url'))) {
+        //     ($brands->logo_url) ? $brandService->deleteImage($brands->logo_url) : '';
+        //     $image_upload = $brandService->uploadImage($request);
+        // }
 
-        $brandService->updateBrand($brands, $input, $image_upload);
+        $brandService->updateBrand($brands, $input);
         return redirect()->route('brands.index')->with('success', 'Brand Updated successfully');
     }
 
@@ -125,11 +119,22 @@ class BrandController extends Controller
     {
         $brand = $brandService->getBrand($id);
 
-        $brandService->deleteImage($brand->logo_url);
+        //$brandService->deleteImage($brand->logo_url);
 
         $brandService->deleteBrand($brand);
 
-        return redirect()->back()
-            ->with('success', 'Brand deleted successfully');
+        return response()->json(array('success' => true, 'message' => 'Brand deleted Successfully'));
+
+        // return redirect()->back()
+        //     ->with('success', 'Brand deleted successfully');
+    }
+
+    public function updateStatus(Request $request, BrandService $brandService)
+    {
+        $input = $request->all();
+
+        $brandService->updateStatus($input);
+
+        return response()->json(array('success' => true, 'message' => 'Status Updated Successfully'));
     }
 }

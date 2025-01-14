@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Banner;
-use App\Models\SellMachine;
+use App\Models\Sellmachine;
 
 class BoostAd extends Model
 {
@@ -18,7 +18,7 @@ class BoostAd extends Model
         'end_date',
         'total_amount',
         'ad_type',
-        'status' // 0- inactive, 1- active, 2- pending for review
+        'status'
     ];
 
     public function setStartDateAttribute($value)
@@ -39,7 +39,16 @@ class BoostAd extends Model
         return $this->hasOne(Banner::class);
     }
     public function sellmachine()
-    {
-        return $this->belongsTo(SellMachine::class);
-    }
+  {
+      return $this->belongsTo(Sellmachine::class, 'sell_machine_id'); 
+  }
+
+    public function package()
+  {
+      return $this->belongsTo(BoostAdPackage::class, 'package_id');
+  }
+    public function boostedDate()
+  {
+      return $this->hasMany(BoostadDate::class, 'boost_ad_id');
+  }
 }

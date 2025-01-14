@@ -12,13 +12,17 @@
     <title>:: Seek Machines Admin :: Home</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
     <link rel="stylesheet" href="{{asset('frontend/assets/plugins/bootstrap/css/bootstrap.min.css')}}">
+
     <link rel="stylesheet" href="{{asset('frontend/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css')}}" />
     <link rel="stylesheet" href="{{asset('frontend/assets/plugins/charts-c3/plugin.css')}}" />
-
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('frontend/assets/plugins/morrisjs/morris.min.css')}}" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.min.css" rel="stylesheet">
     <!-- Custom Css -->
     <link rel="stylesheet" href="{{asset('frontend/assets/css/style.min.css')}}">
+    <link rel="stylesheet" href="{{asset('frontend/assets/css/custom.css')}}">
     @stack('styles')
+    @livewireStyles
 </head>
 
 <body class="theme-blush">
@@ -72,8 +76,14 @@
 
     <script src="{{asset('frontend/assets/bundles/mainscripts.bundle.js')}}"></script>
     <script src="{{asset('frontend/assets/js/pages/index.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.6/dist/sweetalert2.all.min.js"></script>
 
+    @livewireScripts
     @stack('scripts')
+
+
 </body>
 
 

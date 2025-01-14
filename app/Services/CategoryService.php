@@ -15,16 +15,12 @@ class CategoryService
 
     public function getAllCategory($data = []): Object
     {
-        // $query = DB::table('categories as child')
-        //     ->leftJoin('categories as parent', 'child.parent_id', '=', 'parent.id')
-        //     ->select('child.*', 'parent.name as parent');
 
-        // $categories = $query->orderBy('child.name', 'DESC')->get();
-
-        $categories = Category::where('status', 1)->orderBy('name', 'ASC')->get();
+        $categories = Category::orderBy('id', 'ASC')->paginate(25);
 
         return $categories;
     }
+
 
     public function getCategory($id): Object
     {
@@ -36,69 +32,86 @@ class CategoryService
         return Category::orderBy('name', 'asc')->pluck('name', 'id')->toArray();
     }
 
-    public function uploadImage(Request $request): ?string
-    {
-        $imageUrl = "";
-        if ($request->hasfile('icon_url')) {
+    // public function uploadImage(Request $request): ?string
+    // {
+    //     $imageUrl = "";
+    //     if ($request->hasfile('icon_url')) {
 
-            $file = $request->file('icon_url');
-            $assetName = $request->input('name') . time();
-            // generate a new filename. getClientOriginalExtension() for the file extension
-            $filename =  $assetName . '.' . $file->getClientOriginalExtension();
-            $imageUrl = 'categories/' . $filename;
+    //         $file = $request->file('icon_url');
+    //         $assetName = $request->input('name') . time();
+    //         // generate a new filename. getClientOriginalExtension() for the file extension
+    //         $filename =  $assetName . '.' . $file->getClientOriginalExtension();
+    //         $imageUrl = 'categories/' . $filename;
 
-            // save to storage/app/public/brands as the new $filename
-            $image = Image::make($file);
-            $image->save(storage_path('app/public/' . $imageUrl));
-        }
-        return $imageUrl;
-    }
-    public function createCategory(array $userData,string $imageUrl): Category
+    //         // save to storage/app/public/brands as the new $filename
+    //         $image = Image::make($file);
+    //         $image->save(storage_path('app/public/' . $imageUrl));
+    //     }
+    //     return $imageUrl;
+    // }
+    public function createCategory(array $userData): Category
     {
-        $insert=[
+
+        $insert = [
             'name'        => $userData['name'],
             'short_code' => $userData['short_code'],
-            'icon_url'   => $imageUrl,
+            'icon_url'   => $userData['image_url'],
         ];
         if (isset($userData['parent_id']) && !empty($userData['parent_id'])) {
-            $update['parent_id'] = $userData['parent_id'];
+            $insert['parent_id'] = $userData['parent_id'];
+        }
+        if (isset($userData['meta_title']) && !empty($userData['meta_title'])) {
+            $insert['meta_title'] = $userData['meta_title'];
+        }
+        if (isset($userData['keywords']) && !empty($userData['keywords'])) {
+            $insert['keywords'] = $userData['keywords'];
+        }
+        if (isset($userData['meta_descriptions']) && !empty($userData['meta_descriptions'])) {
+            $insert['meta_descriptions'] = $userData['meta_descriptions'];
         }
         return Category::create($insert);
     }
 
-    public function deleteImage(string $imageUrl): void
-    {
-        // delete image
-        if ($imageUrl) {
-            $image_path = storage_path('app/public/') . $imageUrl; // upload path
-            if (File::exists($image_path)) {
-                File::delete($image_path);
-            }
-        }
-    }
+    // public function deleteImage(string $imageUrl): void
+    // {
+    //     // delete image
+    //     if ($imageUrl) {
+    //         $image_path = storage_path('app/public/') . $imageUrl; // upload path
+    //         if (File::exists($image_path)) {
+    //             File::delete($image_path);
+    //         }
+    //     }
+    // }
 
-    public function updateCatgeory(Category $category, array $userData, string $imageUrl = null): void
+    public function updateCatgeory(Category $category, array $userData): void
     {
         $update = [
-            'name'        => $userData['name'],
+            'name'       => $userData['name'],
             'short_code' => $userData['short_code'],
-
+            'status'    => $userData['status']
         ];
         if (isset($userData['parent_id']) && !empty($userData['parent_id'])) {
             $update['parent_id'] = $userData['parent_id'];
         }
-        if (!empty($imageUrl)) {
-            $update['icon_url'] = $imageUrl;
+        if (isset($userData['meta_title']) && !empty($userData['meta_title'])) {
+            $update['meta_title'] = $userData['meta_title'];
+        }
+        if (isset($userData['keywords']) && !empty($userData['keywords'])) {
+            $update['keywords'] = $userData['keywords'];
+        }
+        if (isset($userData['meta_descriptions']) && !empty($userData['meta_descriptions'])) {
+            $update['meta_descriptions'] = $userData['meta_descriptions'];
+        }
+        if (!empty($userData['image_url'])) {
+            $update['icon_url']   = $userData['image_url'];
         }
 
         $category->update($update);
-
     }
 
     public function deleteCategory(Category $category): void
     {
         // delete user
         Category::find($category->id)->delete();
-
     }
 }

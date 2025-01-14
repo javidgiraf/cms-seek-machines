@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\SellmachineService;
+use App\Services\BannerService;
 
 class HomeController extends Controller
 {
@@ -21,8 +23,11 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(SellmachineService $sellmachineService, BannerService $bannerService)
     {
-        return view('home');
+        $sellMachines = $sellmachineService->getPendingSellMachines();
+        $banners = $bannerService->getOnReviewBanners();
+        $sellMachinesPendingads = $sellmachineService->getAdVerifyPendingSellMachines();
+        return view('home', compact('sellMachines', 'banners', 'sellMachinesPendingads'));
     }
 }

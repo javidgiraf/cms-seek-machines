@@ -14,6 +14,7 @@ class Brand extends Model
         'manufacturer',
         'short_code',
         'logo_url',
+        'ispopular',
         'status'
     ];
     public function sellmachine()

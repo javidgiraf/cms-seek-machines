@@ -17,7 +17,7 @@ class QuoterequestController extends Controller
     public function index(QuoteRequestService $quoteRequestService)
     {
         //
-        $quoteRequests = $quoteRequestService->getQuoteRequests();
+        $quoteRequests = $quoteRequestService->getQuoteRequests()->paginate(10);
         return view('quoterequests.index', compact('quoteRequests'));
     }
 
@@ -67,9 +67,11 @@ class QuoterequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,QuoteRequestService $quoteRequestService)
     {
-        //
+         $quoteRequest = $quoteRequestService->getQuoteRequests($id)->first();
+
+          return view('quoterequests.show', compact('quoteRequest'));
     }
 
     /**

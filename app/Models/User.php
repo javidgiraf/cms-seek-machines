@@ -10,10 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Customer;
 use App\Models\SellMachine;
 use App\Models\Subscription;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin'
     ];
 
     /**
@@ -62,4 +64,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(Subscription::class);
     }
+    
 }

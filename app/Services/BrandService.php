@@ -10,45 +10,68 @@ use App\Models\Brand;
 use Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Config;
 
 class BrandService
 {
 
     public function getBrands(): Object
     {
-        return Brand::orderBy('id', 'asc')->get();
+        return Brand::orderBy('id', 'asc')->paginate(25);
     }
-
-    public function uploadImage(Request $request): ?string
+    public function getAllBrands(): Object
     {
-        $imageUrl = "";
-        if ($request->hasfile('logo_url')) {
-
-            $file = $request->file('logo_url');
-            $assetName = $request->input('manufacturer') . time();
-            // generate a new filename. getClientOriginalExtension() for the file extension
-            $filename =  $assetName . '.' . $file->getClientOriginalExtension();
-            $imageUrl = 'brands/' . $filename;
-
-            // save to storage/app/public/brands as the new $filename
-            $image = Image::make($file);
-
-            //     Storage::disk('outside')->put($imageUrl, $imageUrl);
-
-
-            // Storage::disk('public')->put('images/'.$img_name, file_get_contents($file));
-
-            $image->save(storage_path('app/public/' . $imageUrl));
-        }
-        return $imageUrl;
+        return Brand::orderBy('manufacturer', 'asc')->get();
     }
-    public function createBrand(array $userData, string $imageUrl): Brand
+
+    // public function uploadImage(Request $request): ?string
+    // {
+
+    //     $imageUrl = "";
+
+    //     if ($request->hasfile('single_image_url')) {
+
+    //         $image_folder = $request->image_folder;
+
+    //         // $file = $request->file('single_image_url');
+    //         // $assetName = $request->input('manufacturer') . time();
+    //         // $filename =  $assetName . '.' . $file->getClientOriginalExtension();
+    //         // $imageUrl = $image_folder . '/' . $filename;
+
+    //         $imgUrl = $request->file('single_image_url');
+    //         $image = file_get_contents($imgUrl);
+
+    //         $destinationPath = base_path() . '/seek';
+    //         //base_path() . '/seekmachines/storage/app/public/' . $image_folder . '/';
+
+    //         // file_put_contents($destinationPath, $image);
+    //         if (move_uploaded_file(
+    //             $_FILES["single_image_url"]["tmp_name"],
+    //             $destinationPath
+    //         )) {
+    //             echo "The file " .  $_FILES["single_image_url"]["name"] .
+    //                 " has been uploaded.";
+    //         } else {
+    //             echo "Sorry, there was an error uploading your file.";
+    //         }
+    //         die();
+
+    //         /////////////////////
+
+    //     }
+
+    //     return $imageUrl;
+    // }
+
+
+    public function createBrand(array $userData): Brand
     {
         $insert =
             [
-                'manufacturer'    => $userData['manufacturer'],
+                'manufacturer'  => $userData['manufacturer'],
                 'short_code'    => $userData['short_code'],
-                'logo_url'    => $imageUrl,
+                'logo_url'      => $userData['image_url'],
+                'ispopular'     => (isset($userData['ispopular']) && $userData['ispopular']) ? 1 : 0
             ];
 
         if (!empty($userData['status'])) {
@@ -60,30 +83,54 @@ class BrandService
     {
         return Brand::find($id);
     }
-    public function deleteImage(string $imageUrl): void
-    {
-        // delete image
-        if ($imageUrl) {
-            $image_path = storage_path('app/public/') . $imageUrl; // upload path
-            if (File::exists($image_path)) {
-                File::delete($image_path);
-            }
-        }
-    }
+    // public function deleteImage(string $imageUrl): void
+    // {
+    //     // delete image
+    //     $input['imageurl'] = $imageUrl;
 
-    public function updateBrand(Brand $brand, array $userData, string $imageUrl = null): void
+    //     $url = Config::get('app.api_url') . "/deleteImage";
+
+    //     $response = $this->postData($url, $input);
+    // }
+
+    // public function postData($url, $params)
+    // {
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, $url);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    //     $response = curl_exec($ch);
+    //     $err = curl_error($ch);  //if you need
+
+    //     curl_close($ch);
+
+    //     return $response;
+    // }
+
+    public function updateBrand(Brand $brand, array $userData): void
     {
         $update = [
-            'manufacturer'    => $userData['manufacturer'],
+            'manufacturer'  => $userData['manufacturer'],
             'short_code'    => $userData['short_code'],
-            'status'    => $userData['status'],
+            'ispopular'     => (isset($userData['ispopular']) && $userData['ispopular']) ? 1 : 0,
+            'status'        => $userData['status'],
 
         ];
-        if (!empty($imageUrl)) {
-            $update['logo_url'] = $imageUrl;
+        if (!empty($userData['image_url'])) {
+            $update['logo_url'] = $userData['image_url'];
         }
 
         $brand->update($update);
+    }
+
+    public function updateStatus(array $userData): void
+    {
+        $brand = Brand::find($userData['itemid']);
+
+        $brand->update(['status' => $userData['status']]);
     }
 
     public function deleteBrand(Brand $brand): void

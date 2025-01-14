@@ -21,10 +21,15 @@ class MembershipPlanService
     public function createMembershipPlan(array $userData): MembershipPlan
     {
         return MembershipPlan::create([
-            'title'    => $userData['title'],
+            'title'         => $userData['title'],
             'description'   => $userData['description'],
             'pricing'       => $userData['pricing'],
-            'no_of_month'   => $userData['no_of_month']
+            'no_of_month'   => $userData['no_of_month'],
+            'discount'      => $userData['discount'],
+            'view_limit'    => $userData['view_limit'],
+            'is_premium'    => isset($userData['is_premium']) ? 1 : 0,
+            'min_premium_amount'   => $userData['min_premium_amount'],
+            'max_premium_amount'   => $userData['max_premium_amount']
         ]);
     }
     public function getMembershipPlan($id): Object
@@ -34,14 +39,19 @@ class MembershipPlanService
 
     public function updateMembershipPlan(MembershipPlan $MembershipPlan, array $userData): void
     {
+
         $update = [
-            'title'    => $userData['title'],
+            'title'         => $userData['title'],
             'description'   => $userData['description'],
             'pricing'       => $userData['pricing'],
-            'no_of_month'   => $userData['no_of_month']
+            'no_of_month'   => $userData['no_of_month'],
+            'discount'      => $userData['discount'],
+            'view_limit'    => $userData['view_limit'],
+            'is_premium'    => isset($userData['is_premium']) ? 1 : 0,
+            'min_premium_amount'   => $userData['min_premium_amount'],
+            'max_premium_amount'   => $userData['max_premium_amount'],
+            'status'               => $userData['status'],
         ];
-
-
         $MembershipPlan->update($update);
     }
 

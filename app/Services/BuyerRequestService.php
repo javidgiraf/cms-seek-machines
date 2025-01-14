@@ -15,7 +15,7 @@ class BuyerRequestService
 
     public function getBuyerRequests(): Object
     {
-        return BuyerRequest::all();
+        return BuyerRequest::orderBy('id', 'asc')->paginate(25);
     }
 
 
@@ -23,7 +23,6 @@ class BuyerRequestService
     {
 
         $insert =  [
-            'user_id'    => $userData['user_id'],
             'category_id'    => $userData['category_id'],
             'company'    => $userData['company'],
             'contact_name'    => $userData['contact_name'],

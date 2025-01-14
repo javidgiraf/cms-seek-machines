@@ -2,7 +2,7 @@
 @section('content')
 @push('styles')
 <link rel="stylesheet" href="{{asset('frontend/assets/plugins/dropify/css/dropify.min.css')}}">
-<link rel="stylesheet" href="{{asset('frontend/assets/plugins/summernote/dist/summernote.css')}}"/>
+<link rel="stylesheet" href="{{asset('frontend/assets/plugins/summernote/dist/summernote.css')}}" />
 <link href="{{asset('frontend/assets/plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
 @endpush
 <section class="content">
@@ -13,8 +13,8 @@
                     <h2>Admin</h2>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="zmdi zmdi-home"></i> Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{route('admins.index')}}">Admin</a></li>
-                        <li class="breadcrumb-item active">Edit Admin</li>
+                        <li class="breadcrumb-item"><a href="{{route('admins.index')}}">Admin User</a></li>
+                        <li class="breadcrumb-item active">Edit Admin User</li>
                     </ul>
                     <button class="btn btn-primary btn-icon mobile_menu" type="button"><i class="zmdi zmdi-sort-amount-desc"></i></button>
                 </div>
@@ -32,11 +32,11 @@
                     <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                    @endif
 
 
                 </div>
@@ -47,11 +47,11 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Add</strong>Admin</h2>
-                            <div  style='text-align: end';><a href="{{route('admins.index')}}" class="btn btn-primary"><i class="zmdi zmdi-arrow-left" style="padding-right: 6px;"></i><span>Back</span></a></div>
+                            <h2><strong>Edit </strong>Admin User</h2>
+                            <div style='text-align: end' ;><a href="{{route('admins.index')}}" class="btn btn-primary"><i class="zmdi zmdi-arrow-left" style="padding-right: 6px;"></i><span>Back</span></a></div>
                         </div>
                         <div class="body">
-                            <form  method="post" enctype="multipart/form-data" action="{{route('admins.update',encrypt($user->id))}}">
+                            <form method="post" enctype="multipart/form-data" action="{{route('admins.update',$user->id)}}">
                                 @csrf
                                 @method('put')
 
@@ -84,7 +84,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8">
                                         <div class="form-group">
                                             <select class="form-control show-tick ms select2" name="roles">
-                                                <option  selected disabled>--Please Select--</option>
+                                                <option selected disabled>--Please Select--</option>
                                                 @foreach($roles as $role)
                                                 <option value="{{ $role->id }}" @if(in_array($role->id, $userRoles) ) selected @endif> {{ $role->name }} </option>
                                                 @endforeach
@@ -93,13 +93,13 @@
                                     </div>
                                 </div>
 
-                                 <div class="row clearfix">
+                                <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
                                         <label for="password">Password</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8">
                                         <div class="form-group">
-                                            <input type="text" id="password" name="password" class="form-control" value="" placeholder="***********">
+                                            <input type="password" id="password" name="password" class="form-control" value="" placeholder="***********">
                                         </div>
                                     </div>
                                 </div>

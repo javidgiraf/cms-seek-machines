@@ -35,6 +35,7 @@
                                             <th>Plans</th>
                                             <th>Price</th>
                                             <th>Period</th>
+                                            <th>Allowed Views</th>
                                             <th>Action</th>
 
                                         </tr>
@@ -44,17 +45,17 @@
                                             <th>Plans</th>
                                             <th>Price</th>
                                             <th>Period</th>
+                                            <th>Allowed Views</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
                                         @foreach($memberships as $plans)
-
-
                                         <tr>
                                             <td>{{$plans->title}}</td>
                                             <td>{{$plans->pricing}} AED</td>
                                             <td>{{$plans->no_of_month}} Months</td>
+                                            <td>{{$plans->view_limit}}</td>
                                             <td><a href="{{route('memberships.edit',$plans->id)}}" style="margin-right: 10px;"><i class="zmdi zmdi-edit"></i></a>
                                                 <a href="javascript:void(0);" onclick="event.preventDefault();
                                                 document.getElementById('delete-form-{{ $plans->id }}').submit();"><i class="zmdi zmdi-delete"></i></a>

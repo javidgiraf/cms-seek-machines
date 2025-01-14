@@ -55,7 +55,7 @@ return [
 
         // 'outside' => [
         //     'driver' => 'local',
-        //     'root' => '/var/www/html/seekstorage',
+        //     'root' => base_path() . '/seekmachines/storage/app/public/',
         // ],
 
     ],

@@ -15,6 +15,9 @@ class Category extends Model
         'short_code',
         'parent_id',
         'icon_url',
+        'meta_title',
+        'keywords',
+        'meta_descriptions',
         'status'
     ];
     public function parent()

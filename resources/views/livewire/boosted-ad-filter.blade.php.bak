@@ -1,0 +1,89 @@
+  <section class="distributors-area">
+    <div class="container">
+
+      <div class="row">
+        <div class="select-box">
+          <span> {{__('country')}} : </span>
+          <select name="country" id="country" wire:model="country">
+            <option value="">{{__('all_countries')}}</option>
+         @foreach($countries as $country)
+
+            <option value="{{$country->country_id}}">{{$country->title}}</option>
+            @endforeach
+
+
+          </select>
+        </div>
+      </div>
+      <div class="row main-box">
+        <style>
+          .page-item.active .page-link {
+            z-index: 1;
+            color: #fff;
+            background-color: #007a39;
+            border-color: #007a39;
+          }
+
+          .page-link {
+            position: relative;
+            display: block;
+            padding: 0.5rem 0.75rem;
+            margin-left: -1px;
+            line-height: 1.25;
+            color: #007a39;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+          }
+        </style>
+        <!-- 1 -->
+
+        @foreach($distributors as $distributor)
+        <div class="col-xl-6">
+          <div class="row distributors-box">
+            <div class="col-xl-5 col-lg-4 col-md-4 distributors-pic">
+              <img src="{{ config('app.image_root_url'). $distributor->logo_url}}" alt="{{ $distributor->t_title}}">
+            </div>
+            <div class="col-xl-7 col-lg-8 col-md-8 distributors-details">
+              <h3> {{ $distributor->t_title}} </h3>
+
+              <address>
+                {{ $distributor->t_address}}
+              </address>
+
+              <ul class="distributors-social">
+                <li><a href="tel: {{ $distributor->phone}}"><i class="fas fa-phone"></i> </a></li>
+                <li> <a href="mailto: {{ $distributor->email}}"><i class="fas fa-envelope"></i></a> </li>
+                <li> <a href="{{ $distributor->website}}" target="_blank"><i class="fas fa-globe"></i></a> </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        @endforeach
+        <!-- 1 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 1 -->
+
+        <!-- 1 -->
+
+
+
+
+      </div>
+      <div class="row" style="padding-top: 13px;padding-left: 17px;">
+        {{ $distributors->links() }}
+      </div>
+    </div>
+  </section>

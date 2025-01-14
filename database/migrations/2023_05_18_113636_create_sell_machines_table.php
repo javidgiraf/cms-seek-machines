@@ -23,13 +23,14 @@ return new class extends Migration
             $table->string('default_image');
             $table->integer('brand_id')->default(0);
             $table->integer('country_id')->default(0)->nullable();
+            $table->tinyInteger('is_capital')->default(0);
+            $table->decimal('expected_price', 24, 2)->default(0);
             $table->integer('yearof')->nullable();
             $table->string('modelno')->nullable();
             $table->string('usage')->nullable();
-            $table->string('location')->nullable();
-            $table->tinyInteger('price_visible')->default(1);
-            $table->decimal('price', 24, 2)->default(0);
-            $table->string('currency')->default('AED');
+            $table->text('location')->nullable();
+            $table->tinyInteger('isverified')->default(0);
+            $table->date('verify_submitted_on')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
 

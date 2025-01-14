@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Services\UserService;
 use App\Services\CountryService;
 use Illuminate\Http\Request;
@@ -16,8 +17,10 @@ class CustomerController extends Controller
     public function index(UserService $userService)
     {
         //
-        $type='customer';
+        $type = 'customer';
         $users = $userService->getUsers($type);
+
+
         return view('customers.index', compact('users'));
     }
 
@@ -29,8 +32,8 @@ class CustomerController extends Controller
     public function create(CountryService $countryService)
     {
         //
-        $countries = $countryService->getCountries();
-        return view('customers.create',compact('countries'));
+        $countries = $countryService->signupCountries();
+        return view('customers.create', compact('countries'));
     }
 
     /**
@@ -39,7 +42,7 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,UserService $userService)
+    public function store(Request $request, UserService $userService)
     {
         //
         $request->validate([
@@ -47,14 +50,16 @@ class CustomerController extends Controller
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|unique:customers,phone',
             'password' => 'required',
-            'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //  'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
         $input = $request->all();
-        $image_upload = $userService->uploadImage($request);
+        // $image_upload = $userService->uploadImage($request);
         $user = $userService->createUser($input);
         $user_id = $user->id;
-        $userService->createCustomer($user_id,$input, $image_upload);
+
+        $userService->createCustomer($user_id, $input);
+
         return redirect()->route('customers.index')->with('success', 'Customer Added successfully');
     }
 
@@ -75,13 +80,13 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,UserService $userService,CountryService $countryService)
+    public function edit($id, UserService $userService, CountryService $countryService)
     {
         //
-        $id=decrypt($id);
         $user = $userService->getUser($id);
-        $countries = $countryService->getCountries();
-        return view('customers.edit',compact('user','countries'));
+        $countries = $countryService->signupCountries();
+
+        return view('customers.edit', compact('user', 'countries'));
     }
 
     /**
@@ -91,10 +96,9 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id,UserService $userService)
+    public function update(Request $request, $id, UserService $userService)
     {
         //
-        $id=decrypt($id);
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
@@ -102,7 +106,7 @@ class CustomerController extends Controller
                 'required',
                 Rule::unique('customers')->ignore($id, 'user_id'),
             ],
-            'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            // 'icon_url'      => 'file|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
 
         ]);
 
@@ -111,14 +115,15 @@ class CustomerController extends Controller
         // update brands
 
         $user = $userService->getUser($id);
-        $image_upload = null;
-        if (!empty($request->file('image_url'))) {
-            ($user->customer->image_url) ? $userService->deleteImage($user->customer->image_url) : '';
-            $image_upload = $userService->uploadImage($request);
-        }
+        // $image_upload = null;
+        // if (!empty($request->file('image_url'))) {
+        //     ($user->customer->image_url) ? $userService->deleteImage($user->customer->image_url) : '';
+        //     $image_upload = $userService->uploadImage($request);
+        // }
 
         $userService->updateUser($user, $input);
-        $userService->updateCustomer($id, $input, $image_upload);
+        $userService->updateCustomer($id, $input);
+
         return redirect()->route('customers.index')->with('success', 'Customer Updated successfully');
     }
 
@@ -136,7 +141,18 @@ class CustomerController extends Controller
 
         $userService->deleteUser($user);
 
-        return redirect()->back()
-            ->with('success', 'User deleted successfully');
+        return response()->json(array('success' => true, 'message' => 'Customer deleted Successfully'));
+
+        // return redirect()->back()
+        //     ->with('success', 'Customer deleted successfully');
+    }
+
+    public function updateStatus(Request $request, UserService $userService)
+    {
+        $input = $request->all();
+
+        $userService->updateStatus($input);
+
+        return response()->json(array('success' => true, 'message' => 'Customer Verified Successfully'));
     }
 }

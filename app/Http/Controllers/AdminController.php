@@ -16,7 +16,7 @@ class AdminController extends Controller
     public function index(UserService $userService)
     {
         //
-        $type='admin';
+        $type = 'admin';
         $users = $userService->getUsers($type);
         return view('admins.index', compact('users'));
     }
@@ -30,7 +30,8 @@ class AdminController extends Controller
     {
         //
         $roles = Role::where('id', '<>', '6')->pluck('name', 'name')->all();
-        return view('admins.create',compact('roles'));
+
+        return view('admins.create', compact('roles'));
     }
 
     /**
@@ -39,7 +40,7 @@ class AdminController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,UserService $userService)
+    public function store(Request $request, UserService $userService)
     {
         //
         $request->validate([
@@ -50,8 +51,11 @@ class AdminController extends Controller
 
         ]);
         $input = $request->all();
+
         $user = $userService->createUser($input);
+
         $userService->assignUserRoles($input, $user);
+
         return redirect()->route('admins.index')->with('success', 'Admin Added successfully');
     }
 
@@ -72,14 +76,17 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,UserService $userService)
+    public function edit($id, UserService $userService)
     {
         //
-        $id=decrypt($id);
+
         $user = $userService->getUser($id);
+    
         $roles = Role::where('id', '<>', '6')->get(['id', 'name']);
+
         $userRoles = $user->roles->pluck('id')->toArray();
-        return view('admins.edit',compact('user','roles','userRoles'));
+
+        return view('admins.edit', compact('user', 'roles', 'userRoles'));
     }
 
     /**
@@ -89,13 +96,13 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update( Request $request,$id,UserService $userService)
+    public function update(Request $request, $id, UserService $userService)
     {
         //
-        $id=decrypt($id);
+
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,email,'.$id,
+            'email' => 'required|email|unique:users,email,' . $id,
             'roles'      => 'required',
 
         ]);
@@ -103,7 +110,7 @@ class AdminController extends Controller
         $user = $userService->getUser($id);
 
         // update User
-        $userService->updateUser($user,$input);
+        $userService->updateUser($user, $input);
         return redirect()->route('admins.index')->with('success', 'Admin updated successfully');
     }
 

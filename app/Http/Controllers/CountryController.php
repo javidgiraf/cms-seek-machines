@@ -36,13 +36,11 @@ class CountryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,CountryService $countryService)
+    public function store(Request $request, CountryService $countryService)
     {
         //
         $request->validate([
             'name' => 'required',
-
-
         ]);
 
         $input = $request->all();
@@ -69,12 +67,12 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,CountryService $countryService)
+    public function edit($id, CountryService $countryService)
     {
         //
-        $id=decrypt($id);
+
         $country = $countryService->getCountry($id);
-        return view('countries.edit',compact('country'));
+        return view('countries.edit', compact('country'));
     }
 
     /**
@@ -84,14 +82,12 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id,CountryService $countryService)
+    public function update(Request $request, $id, CountryService $countryService)
     {
         //
-        $id=decrypt($id);
+
         $request->validate([
             'name' => 'required',
-
-
         ]);
 
         $input = $request->all();
@@ -111,7 +107,7 @@ class CountryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id,CountryService $countryService)
+    public function destroy($id, CountryService $countryService)
     {
         //
         $country = $countryService->getCountry($id);

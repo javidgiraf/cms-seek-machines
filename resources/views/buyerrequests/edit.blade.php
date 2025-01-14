@@ -1,9 +1,9 @@
 @extends('layouts.default')
 @section('content')
 @push('styles')
-<link rel="stylesheet" href="{{asset('frontend/assets/plugins/dropify/css/dropify.min.css')}}">
-<link rel="stylesheet" href="{{asset('frontend/assets/plugins/summernote/dist/summernote.css')}}"/>
-<link rel="stylesheet" href="{{asset('frontend/assets/plugins/select2/select2.css')}}" />
+
+<link href="{{asset('frontend/assets/plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 <section class="content">
     <div class="body_scroll">
@@ -32,11 +32,11 @@
                     <div class="alert alert-danger">
                         <ul>
                             @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
+                            <li>{{ $error }}</li>
                             @endforeach
                         </ul>
                     </div>
-                @endif
+                    @endif
 
 
                 </div>
@@ -47,21 +47,21 @@
                 <div class="col-lg-12 col-md-12 col-sm-12">
                     <div class="card">
                         <div class="header">
-                            <h2><strong>Edit</strong>Blog</h2>
-                            <div  style='text-align: end';><a href="{{route('buyerrequests.index')}}" class="btn btn-primary"><i class="zmdi zmdi-arrow-left" style="padding-right: 6px;"></i><span>Back</span></a></div>
+                            <h2><strong>Edit</strong> Buyer Requests</h2>
+
                         </div>
                         <div class="body">
-                            <form  method="post" enctype="multipart/form-data" action="{{route('buyerrequests.update',encrypt($buyerRequest->id))}}">
+                            <form method="post" enctype="multipart/form-data" action="{{route('buyerrequests.update',$buyerRequest->id)}}">
                                 @csrf
                                 @method('put')
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
-                                        <label for="category">Category</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
+                                        <label for="category">Industry</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
-                                            <select class="form-control show-tick ms select2" name="category_id">
-                                                <option  selected disabled>--Please Select--</option>
+                                            <select class="form-control show-tick ms category-sel" name="category_id">
+                                                <option selected disabled>--Please Select--</option>
                                                 @foreach ($categories as $category)
                                                 <option value=" {{ $category->id }}" {{($buyerRequest->category_id== $category->id)? "selected": ""}}>
                                                     {{ $category->name }}
@@ -72,30 +72,30 @@
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="company">Company</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="text" id="company" name="company" class="form-control" value="{{$buyerRequest->company}}" placeholder="Enter your Company">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="contact_name">Contact Name</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="text" id="contact_name" name="contact_name" class="form-control" value="{{$buyerRequest->contact_name}}" placeholder="Enter your Contact Name">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="email">Email</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="email" id="email" name="email" class="form-control" value="{{$buyerRequest->email}}" placeholder="Enter customer Email ">
                                         </div>
@@ -103,40 +103,40 @@
                                 </div>
 
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="phone">Phone</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="number" id="phone" name="phone" class="form-control" value="{{$buyerRequest->phone}}" placeholder="Enter customer phone ">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="slug">Description</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <textarea class="form-control" id="description" name="description">{{$buyerRequest->description}}</textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="location">Location</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="text" id="location" name="location" class="form-control" value="{{$buyerRequest->location }}" placeholder="Location">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="product">Product</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
                                             <input type="text" id="product" name="product" class="form-control" value="{{$buyerRequest->product }}" placeholder="Product">
                                         </div>
@@ -145,29 +145,26 @@
 
 
                                 <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 form-control-label">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">
                                         <label for="approve">Approval Status</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
                                         <div class="form-group">
-                                            <select class="form-control show-tick ms select2" name="status">
-                                                <option  selected disabled>--Please Select--</option>
-                                                 <option value='1' {{($buyerRequest->status=='1')?'selected':''}}>Yes</option>
-                                                 <option value='0' {{($buyerRequest->status=='0')?'selected':''}}>No</option>
+                                            <select class="form-control show-tick ms" name="status">
+                                                <option selected disabled>--Please Select--</option>
+                                                <option value='1' {{($buyerRequest->status=='1')?'selected':''}}>Yes</option>
+                                                <option value='0' {{($buyerRequest->status=='0')?'selected':''}}>No</option>
 
                                             </select>
                                         </div>
                                     </div>
                                 </div>
 
-
-
-
-                                <div class="row clearfix">
-
-
-                                    <div class="col-sm-8 offset-sm-2">
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                <div class="row mt-4">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 form-control-label">&nbsp;</div>
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+                                        <button type="submit" class="btn btn-raised btn-primary btn-round waves-effect" id="save-btn">Save</button>
+                                        <a href="{{route('buyerrequests.index')}}" class=" btn btn-raised  btn-round waves-effect btn-secondary">Back</a>
                                     </div>
                                 </div>
                             </form>
@@ -182,10 +179,11 @@
 </section>
 
 @push('scripts')
-<script src="{{asset('frontend/assets/plugins/dropify/js/dropify.min.js')}}"></script>
-<script src="{{asset('frontend/assets/js/pages/forms/dropify.js')}}"></script>
-<script src="{{asset('frontend/assets/plugins/summernote/dist/summernote.js')}}"></script>
-<script src="{{asset('frontend/assets/plugins/select2/select2.min.js')}}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.category-sel').select2();
+    });
+</script>
 @endpush
 @endsection

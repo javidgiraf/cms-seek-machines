@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->tinyInteger('allow_signup')->default(0);
             $table->tinyInteger('status')->default(1);
             //  $table->timestamps();
         });

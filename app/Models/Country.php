@@ -14,7 +14,9 @@ class Country extends Model
 
     protected $fillable = [
         'name',
-        'status'
+        'allow_signup',
+        'status',
+        'flag'
     ];
 
     public function customers()

@@ -32,62 +32,64 @@
                                 <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
                                     <thead>
                                         <tr>
-                                            <th>User</th>
-                                            <th>Category</th>
                                             <th>Company</th>
-                                            <th>Contact Name</th>
+                                            <th>Product</th>
+                                            <th>Industry</th>
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Approval Status</th>
+                                            <th>Submitted On</th>
                                             <th>Action</th>
 
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <th>User</th>
-                                            <th>Category</th>
                                             <th>Company</th>
-                                            <th>Contact Name</th>
+                                            <th>Product</th>
+                                            <th>Industry</th>
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Approval Status</th>
+                                            <th>Submitted On</th>
                                             <th>Action</th>
 
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        @foreach($buyerRequests as $buyerRequest)
+                                        @forelse($buyerRequests as $buyerRequest)
                                         <tr>
-                                            <td>{{$buyerRequest->user->name}}</td>
-                                            <td>{{$buyerRequest->category->name}}</td>
-                                            <td>{{$buyerRequest->company}}</td>
-                                            <td>{{$buyerRequest->contact_name}}</td>
+
+                                            <td>{{$buyerRequest->company}} / {{$buyerRequest->contact_name}}</td>
+                                            <td>{{$buyerRequest->product}} </td>
+                                            <td>{{(isset($buyerRequest->category))?$buyerRequest->category->name:''}}</td>
+
                                             <td>{{$buyerRequest->email}}</td>
                                             <td>{{$buyerRequest->phone}}</td>
                                             @if($buyerRequest->status=='0')
-                                            <td style="background: red;
-                                            padding: 10px;
-                                            color: white;
-                                            font-weight: 700;"><span>Not Verified</span></td>
+                                            <td><span class="badge badge-danger">Not Verified</span></td>
                                             @else
-                                            <td style="background: #0e9f17;
-                                            padding: 10px;
-                                            color: white;
-                                            font-weight: 700;
-                                        "><span>Verified</span></td>
+                                            <td><span class="badge badge-success">Verified</span></td>
                                             @endif
-
-                                            <td><a href="{{route('buyerrequests.edit',encrypt($buyerRequest->id))}}" style="margin-right: 10px;"><i class="zmdi zmdi-edit"></i></a><a href="javascript:void(0);" onclick="event.preventDefault();
-                                                document.getElementById('delete-form-{{ $buyerRequest->id }}').submit();"><i class="zmdi zmdi-delete"></i></a></td>
+                                            <th>{{date("Y-m-d", strtotime($buyerRequest->created_at))}}</th>
+                                            <td>
+                                                <a href="{{route('buyerrequests.edit',$buyerRequest->id)}}" class="mr-2"><i class="zmdi zmdi-edit"></i></a>
+                                                <a href="javascript:void(0);" onclick="event.preventDefault();
+                                                document.getElementById('delete-form-{{ $buyerRequest->id }}').submit();"><i class="zmdi zmdi-delete"></i></a>
+                                            </td>
                                             {!! Form::open(['method' => 'DELETE','route' => ['buyerrequests.destroy', $buyerRequest->id],'style'=>'display:none',
                                             'id' => 'delete-form-'.$buyerRequest->id]) !!}
                                             {!! Form::close() !!}
 
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                        <tr>
+                                            <td colspan="8">There are no data.</td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
+                                {!! $buyerRequests->withQueryString()->links('pagination::bootstrap-5') !!}
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ class QuoteRequestService
 
     public function getQuoteRequests(): Object
     {
-        return Quoterequest::all();
+      return QuoteRequest::query();
     }
 
 
@@ -71,4 +71,3 @@ class QuoteRequestService
 
     }
 }
-

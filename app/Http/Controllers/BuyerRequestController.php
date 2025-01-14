@@ -26,15 +26,15 @@ class BuyerrequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(BuyerRequestService $buyerRequestService,CategoryService $categoryService,UserService $userService)
+    public function create(BuyerRequestService $buyerRequestService, CategoryService $categoryService, UserService $userService)
     {
         //
 
         $categories = $categoryService->getAllCategory();
-        $type='customer';
+        $type = 'customer';
         $users = $userService->getUsers($type);
 
-        return view('buyerrequests.create', compact('categories','users'));
+        return view('buyerrequests.create', compact('categories', 'users'));
     }
 
     /**
@@ -43,16 +43,16 @@ class BuyerrequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,BuyerRequestService $buyerRequestService)
+    public function store(Request $request, BuyerRequestService $buyerRequestService)
     {
         //
         $request->validate([
-            'user_id' => 'required',
             'category_id' => 'required',
             'company' => 'required',
             'contact_name' => 'required',
             'email' => 'email',
-
+            'product' => 'required',
+            'description' => 'required'
         ]);
         $input = $request->all();
 
@@ -78,13 +78,12 @@ class BuyerrequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id,BuyerRequestService $buyerRequestService,CategoryService $categoryService)
+    public function edit($id, BuyerRequestService $buyerRequestService, CategoryService $categoryService)
     {
         //
-        $id=decrypt($id);
         $categories = $categoryService->getAllCategory();
         $buyerRequest = $buyerRequestService->getBuyerRequest($id);
-        return view('buyerrequests.edit',compact('buyerRequest','categories'));
+        return view('buyerrequests.edit', compact('buyerRequest', 'categories'));
     }
     /**
      * Update the specified resource in storage.
@@ -93,15 +92,16 @@ class BuyerrequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id,BuyerRequestService $buyerRequestService)
+    public function update(Request $request, $id, BuyerRequestService $buyerRequestService)
     {
         //
-        $id=decrypt($id);
         $request->validate([
             'category_id' => 'required',
             'company' => 'required',
             'contact_name' => 'required',
             'email' => 'email',
+            'product' => 'required',
+            'description' => 'required'
 
         ]);
 
@@ -111,7 +111,6 @@ class BuyerrequestController extends Controller
         $buyerRequestService->updateBuyerRequest($buyerRequest, $input);
 
         return redirect()->route('buyerrequests.index')->with('success', 'Buyer Request updated successfully');
-
     }
 
     /**
